@@ -18,8 +18,7 @@ def get_article_of_the_day():
     chrome_options.add_argument("--disable-dev-shm-usage")
 
     # Add this line for Render compatibility
-    chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN", "/usr/bin/chromium-browser")
-
+    chrome_options.binary_location = os.path.join(os.getcwd(), "chrome/opt/google/chrome/chrome")
     driver = webdriver.Chrome(
         service=Service(ChromeDriverManager().install()),
         options=chrome_options
