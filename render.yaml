@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: wiki-aotd
+    env: python
+    build:
+      os: ubuntu-22.04  # <-- Critical for Chrome compatibility
+    envVars:
+      - key: GOOGLE_CHROME_BIN
+        value: /opt/render/project/src/chrome/opt/google/chrome/chrome
+      - key: PYTHON_VERSION
+        value: 3.11.8
+    buildCommand: |
+      pip install -r requirements.txt
+      curl -LO https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+      mkdir -p chrome && dpkg -x google-chrome-stable_current_amd64.deb chrome
+      rm google-chrome-stable_current_amd64.deb
+    startCommand: gunicorn app:app
