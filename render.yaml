@@ -2,10 +2,8 @@ services:
   - type: web
     name: selenium-app
     env: python
-    build:
-      os: ubuntu-22.04
     envVars:
-      - key: CHROME_BIN  # Correct environment variable
+      - key: CHROME_BIN
         value: /opt/render/project/src/chrome/opt/google/chrome/chrome
     buildCommand: |
       pip install -r requirements.txt
@@ -13,6 +11,5 @@ services:
       mkdir -p chrome
       dpkg -x google-chrome-stable_current_amd64.deb chrome
       rm google-chrome-stable_current_amd64.deb
-      chmod +x chrome/opt/google/chrome/chrome  # Make Chrome executable
-      gunicorn app:app
+      chmod +x chrome/opt/google/chrome/chrome
     startCommand: gunicorn app:app
