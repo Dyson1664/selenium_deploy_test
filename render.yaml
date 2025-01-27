@@ -5,11 +5,13 @@ services:
     build:
       os: ubuntu-22.04
     envVars:
-      - key: GOOGLE_CHROME_BIN
+      - key: CHROME_BIN  # Correct environment variable
         value: /opt/render/project/src/chrome/opt/google/chrome/chrome
     buildCommand: |
       pip install -r requirements.txt
       curl -LO https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-      mkdir -p chrome && dpkg -x google-chrome-stable_current_amd64.deb chrome
+      mkdir -p chrome
+      dpkg -x google-chrome-stable_current_amd64.deb chrome
       rm google-chrome-stable_current_amd64.deb
+      chmod +x chrome/opt/google/chrome/chrome  # Make Chrome executable
     startCommand: gunicorn app:app

@@ -3,9 +3,9 @@ from flask import Flask, jsonify
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By  # Added import
 from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.core.utils import ChromeType
-
+from webdriver_manager.core.os_manager import ChromeType
 app = Flask(__name__)
 
 
@@ -15,15 +15,12 @@ def get_article_of_the_day():
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
 
-    # Explicit Chrome binary path
-    chrome_options.binary_location = os.path.join(
-        os.getcwd(),
-        "chrome/opt/google/chrome/chrome"
-    )
+    # Use environment variable for Chrome binary
+    chrome_options.binary_location = os.environ.get("CHROME_BIN")
 
     driver = webdriver.Chrome(
         service=Service(
-            ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()
+            ChromeDriverManager(chrome_type=ChromeType.GOOGLE).install()  # Changed to GOOGLE
         ),
         options=chrome_options
     )
