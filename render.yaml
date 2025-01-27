@@ -14,4 +14,5 @@ services:
       dpkg -x google-chrome-stable_current_amd64.deb chrome
       rm google-chrome-stable_current_amd64.deb
       chmod +x chrome/opt/google/chrome/chrome  # Make Chrome executable
+      gunicorn app:app
     startCommand: gunicorn app:app
