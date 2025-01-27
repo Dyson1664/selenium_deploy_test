@@ -8,19 +8,22 @@ from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.core.os_manager import ChromeType
 app = Flask(__name__)
 
+from webdriver_manager.chrome import ChromeDriverManager
 
 def get_article_of_the_day():
     chrome_options = Options()
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
-
-    # Use environment variable for Chrome binary
     chrome_options.binary_location = os.environ.get("CHROME_BIN")
 
+    # Use ChromeDriverManager with compatibility fix
     driver = webdriver.Chrome(
         service=Service(
-            ChromeDriverManager(chrome_type=ChromeType.GOOGLE).install()  # Changed to GOOGLE
+            ChromeDriverManager(
+                chrome_type=ChromeType.GOOGLE,
+                version="122.0.6261.94"  # Explicit version matching Chrome 132
+            ).install()
         ),
         options=chrome_options
     )

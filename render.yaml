@@ -8,8 +8,16 @@ services:
     buildCommand: |
       pip install -r requirements.txt
       curl -LO https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-      mkdir -p chrome
-      dpkg -x google-chrome-stable_current_amd64.deb chrome
+      mkdir -p chrome && dpkg -x google-chrome-stable_current_amd64.deb chrome
       rm google-chrome-stable_current_amd64.deb
       chmod +x chrome/opt/google/chrome/chrome
+
+      # Install matching ChromeDriver
+      CHROME_VERSION=$(google-chrome --version | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
+      wget https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION
+      CHROMEDRIVER_VERSION=$(cat LATEST_RELEASE_$CHROME_VERSION)
+      wget https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip
+      unzip chromedriver_linux64.zip -d /opt/render/project/src/
+      chmod +x /opt/render/project/src/chromedriver
+      export PATH=$PATH:/opt/render/project/src/
     startCommand: gunicorn app:app
